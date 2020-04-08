@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "omgReactNativeChat",
-    "slug": "omgReactNativeChat",
+    "name": "my-new-project",
+    "slug": "my-new-project",
     "platforms": [
       "ios",
       "android",
