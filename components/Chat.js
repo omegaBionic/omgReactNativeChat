@@ -2,20 +2,21 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
 export class Chat extends React.Component {
-    render() {
-      return (
-        <View style={styles.container}>
-          <Text>ChatPage</Text>
-        </View>
-      );
-    }
+  render() {
+    const { user } = this.props;
+    return (
+      <View style={styles.container}>
+        <Text>Ouverture du chat de {user} !</Text>
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-  });
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
