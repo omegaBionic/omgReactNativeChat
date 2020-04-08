@@ -4,8 +4,8 @@ import { Text, View, StyleSheet } from 'react-native';
 export class Home extends React.Component {
     render() {
       return (
-          <View style={styles.container}>
-        <Text style={styles.h1}>HomePage</Text>
+        <View style={styles.container}>
+            <Text style={styles.h1}>HomePage</Text>
         </View>
       );
     }
@@ -14,12 +14,21 @@ export class Home extends React.Component {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#000',
+      backgroundColor: '#CCC',
       alignItems: 'center',
       justifyContent: 'center',
+      padding: 8
     },
     h1: {
-      color: 'blue',
       fontSize: 20
+    },
+    input: {
+      backgroundColor: "white",
+      borderStyle: "solid",
+      borderWidth: 1,
+      borderColor: "black",
+      margin: 8,
+      padding: 4,
+      width: '100%'
     }
   });
