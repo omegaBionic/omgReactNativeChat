@@ -1,27 +1,56 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
+import moment from 'moment';
 
-export class MessageItem extends React.Component {
-    render() {
-        const { user, message } = this.props;
-        const { id, content, author } = message;
+export class MessageItem extends React.Component{
+    render(){
+        const {user, message} = this.props;
+        const {id, content, author, created_at} = message;
+
         const isAuthor = user == author;
 
         return (
-            <View style={[style.root, {
-                alignSelf: isAuthor ? 'flex-end' : 'flex-start'
+            <View style={[styles.root, {
+                alignSelf: isAuthor ? 'flex-end' : 'flex-start',
+                backgroundColor: isAuthor ? '#55F' : '#CCC',
+                borderBottomLeftRadius: isAuthor ? 16 : 0,
+                borderBottomRightRadius: isAuthor ? 0 : 16,
             }]}>
-                <Text> {content} </Text>
+                {!isAuthor &&
+                <Text style={styles.author}>
+                    {author}
+                </Text>
+            }
+                <Text style={[styles.content,{color: isAuthor ? 'white' : 'black'}]}>{content}</Text>
+                <Text style={[styles.timestamp, {
+                    color: isAuthor ? '#DDD' : '#555'
+                }]}> 
+                {moment(created_at).fromNow()}
+                </Text>
             </View>
         )
     }
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     root: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
+      padding: 8,
+      backgroundColor: '#CCC',
+      borderRadius: 16,
+      margin: 8,
+      alignSelf: 'flex-start',
+      maxWidth: '70%'
     },
-});
+    content: {
+        marginBottom: 4
+    },
+    timestamp: {
+        fontStyle: 'italic',
+        fontSize: 10,
+        textAlign: 'right'
+    },
+    author: {
+        fontWeight: 'bold',
+        fontSize: 11
+    }
+  });

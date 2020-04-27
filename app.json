@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "my-new-project",
-    "slug": "my-new-project",
+    "name": "ChatApp",
+    "slug": "ChatApp",
     "platforms": [
       "ios",
       "android",

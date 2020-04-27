@@ -1,26 +1,75 @@
-import PouchDB from 'pouchdb-react-native'
-class Chat {
+import PouchDB from 'pouchdb-react-native';
 
-    async join(user, room) {
-        user = null
-        room = null
-        db = null
+const REMOTE_DB = 'http://gathor.org:5984/';
 
-        this.user = user || 'Anonymous';
-        this.room = room || 'général';
+let db, currentUser, currentroom, sync = null;
 
-        try {
-            this.db = new PouchDB();
-
-            const response = await this.db.allDocs({
-                include_docs: true
-            });
-            return response.rows.map(row => row.doc);
-
-        } catch (e) {
-            console.error(e)
-        }
-    }
+export const chatService = {
+    join,
+    sendMessage,
+    listMessages
 }
 
-export const chatService = new chat();
+    function join(user, room, onSync, onFail){
+        if(/^_/.test(room)){
+            onFail('Le nom du salon ne peut pas commencer par "_"');
+        }
+        currentUser = user || 'Anonymous';
+        currentroom = room.toLowerCase() || 'general';
+        db = new PouchDB(currentroom);
+
+ //       return db.allDocs({
+ //           include_docs: true,
+ //       }).then(response =>
+ //          response.rows
+ //           .map(row => row.doc)
+ //           .sort((a,b) => a.created_at > b.created_at)
+ //           );
+            sync = db.sync(`${REMOTE_DB}/${currentroom}`, {
+                live: true,
+                retry: true,
+                continuous: true
+            });
+            sync.on('change', handleChange(onSync));
+            sync.on('error', handleError(onFail));
+            return listMessages();
+        }
+
+    function listMessages() {
+        return db.allDocs({
+            include_docs: true,
+        }).then(response => {
+           return response.rows
+            .map(row => row.doc)
+            .sort((a,b) => a.created_at > b.created_at)
+        });
+    }    
+
+    function handleChange(callback){
+        return change => {
+            console.log('change', change);
+            listMessages()
+            .then(messages => callback(messages))
+            .catch(console.error);
+            
+        }
+    }    
+
+    function handleError(callabck){
+        return error => {
+            callabck(error);
+        }
+    }  
+
+    function sendMessage(message) {
+        message = {
+            ...message,
+             author: currentUser,
+             created_at: new Date()
+            };
+        return db.post(message).then(({id}) => ({
+            ...message,
+            id
+        }));
+    }
+

@@ -1,20 +1,29 @@
 import React from 'react';
-import { Home } from './components/Home';
-import { Chat } from './components/Chat';
-import { Router, Stack, Scene } from 'react-native-router-flux';
+import {createStore, applyMiddleware} from 'redux';
+import {Provider} from 'react-redux';
+import rootReducer from './reducers';
+import { StyleSheet, Text, View } from 'react-native';
+import {Router, Stack, Scene} from 'react-native-router-flux';
+import {Home, Chat} from './components';
+import thunk from 'redux-thunk';
 
-//export default class App extends React.Component (ES6). ne pas oublier le render().
+console.ignoredYellowBox = ['Setting a timer'];
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 export default class App extends React.Component {
-  render() {
-    //composent React
-    return (
+ render(){
+  return (
+    <Provider store={store}>
       <Router>
         <Stack key="mainStack">
-          <Scene key="home" component={Home} title="Home" />
-          <Scene key="chat" component={Chat} title="sallon" />
+          <Scene key="home" component={Home} title="Home"/>
+          <Scene key="chat" component={Chat} title="Chat"/>
         </Stack>
       </Router>
-    );
+    </Provider> 
+   );
   }
 }
+
+
